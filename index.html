@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#090c12">
+<title>INDACO Guitar Tuner</title>
+<style>
+  :root{
+    --bg:#090c12;
+    --panel:#111722;
+    --panel2:#171f2d;
+    --text:#f6f7fb;
+    --muted:#8793a6;
+    --line:#263143;
+    --ok:#3ee58c;
+    --warn:#ffbd4a;
+    --hot:#ff5e66;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+  body{
+    min-height:100dvh;
+    display:flex;
+    justify-content:center;
+    background:
+      radial-gradient(circle at 50% -10%, #243147 0%, transparent 36%),
+      linear-gradient(180deg,#0d111a 0%,#080b10 100%);
+  }
+  .app{width:min(100%,520px);min-height:100dvh;padding:20px 18px 28px;display:flex;flex-direction:column}
+  .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+  .brand{font-weight:900;letter-spacing:.18em;font-size:14px}
+  .brand span{color:var(--ok)}
+  .mic-dot{width:10px;height:10px;border-radius:50%;background:#475064;box-shadow:0 0 0 5px rgba(255,255,255,.03)}
+  .mic-dot.on{background:var(--ok);box-shadow:0 0 14px rgba(62,229,140,.7)}
+  .card{
+    flex:1;
+    border:1px solid rgba(255,255,255,.07);
+    background:rgba(17,23,34,.84);
+    backdrop-filter:blur(10px);
+    border-radius:26px;
+    padding:22px 18px 18px;
+    box-shadow:0 22px 60px rgba(0,0,0,.34);
+    display:flex;
+    flex-direction:column;
+  }
+  .mode-label{text-align:center;color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.15em}
+  .note-wrap{text-align:center;margin-top:8px}
+  .note{font-size:102px;line-height:.95;font-weight:900;letter-spacing:-.08em}
+  .octave{font-size:28px;color:var(--muted);font-weight:700;margin-left:5px}
+  .freq{margin-top:10px;color:var(--muted);font-variant-numeric:tabular-nums}
+  .target{margin-top:8px;font-size:14px;color:#c8d0dc;min-height:20px}
+  .meter{position:relative;height:150px;margin:18px 0 0}
+  .arc{
+    position:absolute;left:7%;right:7%;bottom:8px;height:118px;
+    border-top:3px solid var(--line);
+    border-radius:50% 50% 0 0 / 100% 100% 0 0;
+    overflow:hidden;
+  }
+  .ticks{position:absolute;left:7%;right:7%;bottom:11px;height:116px}
+  .tick{position:absolute;left:50%;bottom:0;width:2px;height:12px;background:#4f5a6c;transform-origin:50% 100%}
+  .tick.major{height:20px;background:#8190a5}
+  .needle{
+    position:absolute;left:50%;bottom:8px;width:3px;height:105px;border-radius:3px;
+    background:var(--warn);
+    transform-origin:50% 100%;
+    transform:translateX(-50%) rotate(0deg);
+    box-shadow:0 0 16px rgba(255,189,74,.38);
+    transition:transform .09s linear, background .15s;
+  }
+  .pivot{position:absolute;left:50%;bottom:2px;transform:translateX(-50%);width:16px;height:16px;border-radius:50%;background:#dbe2ec;border:4px solid #505b6e}
+  .scale{display:flex;justify-content:space-between;padding:0 4%;margin-top:-2px;color:#647188;font-size:11px}
+  .cents{text-align:center;font-size:25px;font-weight:800;margin-top:4px;font-variant-numeric:tabular-nums}
+  .status{text-align:center;margin-top:5px;height:25px;font-size:14px;font-weight:800;letter-spacing:.08em}
+  .strings{display:grid;grid-template-columns:repeat(6,1fr);gap:7px;margin:17px 0 5px}
+  .string{
+    padding:10px 2px;border-radius:12px;background:#0d131d;border:1px solid var(--line);
+    text-align:center;color:#c5cedb;font-size:13px;font-weight:800;
+  }
+  .string.active{border-color:var(--ok);background:rgba(62,229,140,.08);color:var(--ok)}
+  .controls{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;margin-top:auto;padding-top:18px}
+  button{
+    -webkit-tap-highlight-color:transparent;
+    border:1px solid var(--line);background:#0d131d;color:#cbd4e1;
+    padding:12px 8px;border-radius:13px;font-weight:800;font-size:12px;cursor:pointer
+  }
+  button.active{background:#eaf0f7;color:#0a0d12;border-color:#eaf0f7}
+  .start{
+    width:100%;margin-top:10px;padding:15px;border-radius:15px;font-size:15px;
+    background:var(--ok);color:#04130b;border:0;
+  }
+  .start.stop{background:#283246;color:#fff}
+  .hint{text-align:center;color:#6f7c91;font-size:11px;line-height:1.45;margin-top:11px;padding:0 8px}
+  .error{color:#ff858a;text-align:center;font-size:12px;margin-top:8px;min-height:18px}
+  @media(max-height:720px){
+    .note{font-size:80px}.meter{height:125px}.arc{height:96px}.ticks{height:94px}.needle{height:84px}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="top">
+    <div class="brand"><span>INDACO</span> TUNER</div>
+    <div id="micDot" class="mic-dot"></div>
+  </div>
+
+  <main class="card">
+    <div id="modeLabel" class="mode-label">Accordatura standard</div>
+
+    <div class="note-wrap">
+      <span id="note" class="note">—</span><span id="octave" class="octave"></span>
+      <div id="freq" class="freq">Tocca “Avvia microfono”</div>
+      <div id="target" class="target"></div>
+    </div>
+
+    <div class="meter">
+      <div class="arc"></div>
+      <div id="ticks" class="ticks"></div>
+      <div id="needle" class="needle"></div>
+      <div class="pivot"></div>
+    </div>
+    <div class="scale"><span>-50</span><span>-25</span><span>0</span><span>+25</span><span>+50</span></div>
+    <div id="cents" class="cents">0 cents</div>
+    <div id="status" class="status">PRONTO</div>
+
+    <div id="strings" class="strings"></div>
+
+    <div class="controls">
+      <button data-mode="standard" class="mode active">STANDARD</button>
+      <button data-mode="flat" class="mode">½ TONO ↓</button>
+      <button data-mode="chromatic" class="mode">CROMATICO</button>
+    </div>
+    <button id="startBtn" class="start">🎙️ Avvia microfono</button>
+    <div id="error" class="error"></div>
+    <div class="hint">Suona una corda alla volta. Per maggiore precisione usa il telefono vicino alla chitarra e riduci il rumore ambientale.</div>
+  </main>
+</div>
+
+<script>
+(() => {
+  const NOTE_NAMES = ['C','C♯','D','D♯','E','F','F♯','G','G♯','A','A♯','B'];
+
+  const TUNINGS = {
+    standard: [
+      {name:'E', midi:40}, {name:'A', midi:45}, {name:'D', midi:50},
+      {name:'G', midi:55}, {name:'B', midi:59}, {name:'E', midi:64}
+    ],
+    flat: [
+      {name:'E♭', midi:39}, {name:'A♭', midi:44}, {name:'D♭', midi:49},
+      {name:'G♭', midi:54}, {name:'B♭', midi:58}, {name:'E♭', midi:63}
+    ]
+  };
+
+  let audioContext = null, analyser = null, stream = null, raf = null;
+  let mode = 'standard';
+  let running = false;
+  const history = [];
+
+  const $ = id => document.getElementById(id);
+  const noteEl = $('note'), octaveEl = $('octave'), freqEl = $('freq'),
+        centsEl = $('cents'), statusEl = $('status'), needle = $('needle'),
+        startBtn = $('startBtn'), errorEl = $('error'), targetEl = $('target'),
+        micDot = $('micDot'), stringsEl = $('strings'), modeLabel = $('modeLabel');
+
+  // Draw meter ticks
+  for (let i=-5; i<=5; i++) {
+    const t = document.createElement('div');
+    t.className = 'tick' + (i % 5 === 0 ? ' major' : '');
+    const angle = i * 9;
+    t.style.transform = `translateX(-50%) rotate(${angle}deg) translateY(-98px)`;
+    $('ticks').appendChild(t);
+  }
+
+  const midiToFreq = midi => 440 * Math.pow(2, (midi - 69) / 12);
+  const freqToMidi = freq => 69 + 12 * Math.log2(freq / 440);
+  const centsFrom = (freq, targetFreq) => 1200 * Math.log2(freq / targetFreq);
+
+  function renderStrings(activeIndex=-1) {
+    stringsEl.innerHTML = '';
+    if (mode === 'chromatic') {
+      stringsEl.style.display = 'none';
+      return;
+    }
+    stringsEl.style.display = 'grid';
+    TUNINGS[mode].forEach((s,i) => {
+      const el = document.createElement('div');
+      el.className = 'string' + (i === activeIndex ? ' active' : '');
+      el.innerHTML = `${s.name}<div style="font-size:9px;color:#68758a;margin-top:2px">${i+1}</div>`;
+      stringsEl.appendChild(el);
+    });
+  }
+
+  function setMode(next) {
+    mode = next;
+    document.querySelectorAll('.mode').forEach(b => b.classList.toggle('active', b.dataset.mode === mode));
+    modeLabel.textContent =
+      mode === 'standard' ? 'Accordatura standard E A D G B E' :
+      mode === 'flat' ? 'Mezzo tono sotto E♭ A♭ D♭ G♭ B♭ E♭' :
+      'Accordatore cromatico';
+    targetEl.textContent = '';
+    renderStrings();
+  }
+
+  document.querySelectorAll('.mode').forEach(btn => btn.addEventListener('click', () => setMode(btn.dataset.mode)));
+
+  function nearestTarget(freq) {
+    if (mode === 'chromatic') {
+      const midi = Math.round(freqToMidi(freq));
+      return {
+        midi,
+        freq: midiToFreq(midi),
+        name: NOTE_NAMES[(midi % 12 + 12) % 12],
+        octave: Math.floor(midi / 12) - 1,
+        index: -1
+      };
+    }
+    const arr = TUNINGS[mode];
+    let best = null, bestDist = Infinity, idx = -1;
+    arr.forEach((s,i) => {
+      const f = midiToFreq(s.midi);
+      const d = Math.abs(1200 * Math.log2(freq/f));
+      if (d < bestDist) {
+        bestDist = d;
+        best = {...s, freq:f, octave:Math.floor(s.midi/12)-1};
+        idx = i;
+      }
+    });
+    return {...best, index:idx};
+  }
+
+  // YIN-style pitch detector: stable enough for monophonic guitar tuning.
+  function detectPitch(buffer, sampleRate) {
+    const size = buffer.length;
+    let rms = 0;
+    for (let i=0;i<size;i++) rms += buffer[i]*buffer[i];
+    rms = Math.sqrt(rms/size);
+    if (rms < 0.008) return null;
+
+    const minFreq = 65, maxFreq = 1000;
+    const minTau = Math.floor(sampleRate/maxFreq);
+    const maxTau = Math.min(Math.floor(sampleRate/minFreq), size/2);
+    const diff = new Float32Array(maxTau+1);
+
+    for (let tau=minTau; tau<=maxTau; tau++) {
+      let sum = 0;
+      for (let i=0; i<size-tau; i++) {
+        const d = buffer[i] - buffer[i+tau];
+        sum += d*d;
+      }
+      diff[tau] = sum;
+    }
+
+    let runningSum = 0;
+    const cmnd = new Float32Array(maxTau+1);
+    cmnd[0] = 1;
+    for (let tau=1; tau<=maxTau; tau++) {
+      runningSum += diff[tau];
+      cmnd[tau] = runningSum ? diff[tau] * tau / runningSum : 1;
+    }
+
+    let tauEstimate = -1;
+    const threshold = 0.16;
+    for (let tau=minTau; tau<maxTau; tau++) {
+      if (cmnd[tau] < threshold) {
+        while (tau+1 <= maxTau && cmnd[tau+1] < cmnd[tau]) tau++;
+        tauEstimate = tau;
+        break;
+      }
+    }
+    if (tauEstimate < 0) return null;
+
+    // Parabolic interpolation around minimum
+    const x0 = Math.max(tauEstimate-1, minTau);
+    const x2 = Math.min(tauEstimate+1, maxTau);
+    let betterTau = tauEstimate;
+    if (x0 !== tauEstimate && x2 !== tauEstimate) {
+      const s0 = cmnd[x0], s1 = cmnd[tauEstimate], s2 = cmnd[x2];
+      const denom = 2*(2*s1-s2-s0);
+      if (Math.abs(denom) > 1e-9) betterTau = tauEstimate + (s2-s0)/denom;
+    }
+    const pitch = sampleRate / betterTau;
+    return (pitch >= minFreq && pitch <= maxFreq) ? pitch : null;
+  }
+
+  function median(values) {
+    const a = [...values].sort((x,y)=>x-y);
+    const m = Math.floor(a.length/2);
+    return a.length % 2 ? a[m] : (a[m-1]+a[m])/2;
+  }
+
+  function updateUI(freq) {
+    const target = nearestTarget(freq);
+    let cents = centsFrom(freq, target.freq);
+    cents = Math.max(-50, Math.min(50, cents));
+
+    noteEl.textContent = target.name;
+    octaveEl.textContent = target.octave ?? '';
+    freqEl.textContent = `${freq.toFixed(1)} Hz`;
+    centsEl.textContent = `${cents >= 0 ? '+' : ''}${Math.round(cents)} cents`;
+
+    if (mode !== 'chromatic') {
+      targetEl.textContent = `Corda ${target.index+1} · target ${target.freq.toFixed(1)} Hz`;
+      renderStrings(target.index);
+    } else {
+      targetEl.textContent = `Target ${target.freq.toFixed(1)} Hz`;
+    }
+
+    const angle = cents * 0.9;
+    needle.style.transform = `translateX(-50%) rotate(${angle}deg)`;
+
+    const abs = Math.abs(cents);
+    if (abs <= 4) {
+      statusEl.textContent = '✓ ACCORDATO';
+      statusEl.style.color = 'var(--ok)';
+      needle.style.background = 'var(--ok)';
+    } else if (cents < 0) {
+      statusEl.textContent = '↑ ALZA';
+      statusEl.style.color = 'var(--warn)';
+      needle.style.background = 'var(--warn)';
+    } else {
+      statusEl.textContent = '↓ ABBASSA';
+      statusEl.style.color = 'var(--hot)';
+      needle.style.background = 'var(--hot)';
+    }
+  }
+
+  function loop() {
+    if (!running || !analyser) return;
+    const buffer = new Float32Array(analyser.fftSize);
+    analyser.getFloatTimeDomainData(buffer);
+    const pitch = detectPitch(buffer, audioContext.sampleRate);
+
+    if (pitch) {
+      history.push(pitch);
+      if (history.length > 5) history.shift();
+      updateUI(median(history));
+    }
+    raf = requestAnimationFrame(loop);
+  }
+
+  async function start() {
+    errorEl.textContent = '';
+    try {
+      stream = await navigator.mediaDevices.getUserMedia({
+        audio: {
+          echoCancellation:false,
+          noiseSuppression:false,
+          autoGainControl:false,
+          channelCount:1
+        }
+      });
+      audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      await audioContext.resume();
+      const source = audioContext.createMediaStreamSource(stream);
+      analyser = audioContext.createAnalyser();
+      analyser.fftSize = 4096;
+      analyser.smoothingTimeConstant = 0;
+      source.connect(analyser);
+
+      running = true;
+      micDot.classList.add('on');
+      startBtn.textContent = '■ Ferma microfono';
+      startBtn.classList.add('stop');
+      freqEl.textContent = 'Suona una corda…';
+      statusEl.textContent = 'IN ASCOLTO';
+      statusEl.style.color = '#aeb9c9';
+      history.length = 0;
+      loop();
+    } catch (err) {
+      console.error(err);
+      errorEl.textContent = 'Non riesco ad accedere al microfono. Verifica il permesso del browser e usa il sito in HTTPS.';
+    }
+  }
+
+  function stop() {
+    running = false;
+    cancelAnimationFrame(raf);
+    if (stream) stream.getTracks().forEach(t => t.stop());
+    if (audioContext) audioContext.close();
+    stream = null; analyser = null; audioContext = null;
+    micDot.classList.remove('on');
+    startBtn.textContent = '🎙️ Avvia microfono';
+    startBtn.classList.remove('stop');
+    statusEl.textContent = 'PRONTO';
+    statusEl.style.color = '';
+    freqEl.textContent = 'Tocca “Avvia microfono”';
+    noteEl.textContent = '—';
+    octaveEl.textContent = '';
+    targetEl.textContent = '';
+    centsEl.textContent = '0 cents';
+    needle.style.transform = 'translateX(-50%) rotate(0deg)';
+    needle.style.background = 'var(--warn)';
+    renderStrings();
+  }
+
+  startBtn.addEventListener('click', () => running ? stop() : start());
+
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+    errorEl.textContent = 'Questo browser non supporta l’accesso al microfono.';
+    startBtn.disabled = true;
+  }
+
+  setMode('standard');
+})();
+</script>
+</body>
+</html>
