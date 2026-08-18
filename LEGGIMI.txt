@@ -1,0 +1,19 @@
+INDACO GUITAR TUNER - PWA ROOT READY
+
+Nel repository GitHub "Accordatore-indaco-" fai:
+Add file > Upload files
+
+Carica TUTTI i file estratti da questo ZIP nella root.
+Non serve creare una cartella icons.
+
+Il vecchio index.html verrà aggiornato.
+Puoi lasciare anche IndacoTuner_AndroidStudio_Project.zip: non interferisce con GitHub Pages.
+
+Dopo il Commit changes:
+1. aspetta circa 1-2 minuti;
+2. apri il sito GitHub Pages dal telefono;
+3. se avevi già una scorciatoia, eliminala;
+4. dal menu Chrome scegli "Installa app" / "Aggiungi a schermata Home";
+5. al primo avvio autorizza il microfono.
+
+GitHub Pages usa HTTPS, necessario per l'accesso al microfono.

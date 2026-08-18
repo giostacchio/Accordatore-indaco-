@@ -96,6 +96,14 @@
     .note{font-size:80px}.meter{height:125px}.arc{height:96px}.ticks{height:94px}.needle{height:84px}
   }
 </style>
+
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="INDACO Tuner">
+
 </head>
 <body>
 <div class="app">
@@ -403,5 +411,14 @@
   setMode('standard');
 })();
 </script>
+
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./service-worker.js').catch(console.error);
+  });
+}
+</script>
+
 </body>
 </html>
