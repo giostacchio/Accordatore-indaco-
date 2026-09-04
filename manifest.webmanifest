@@ -1,13 +1,16 @@
 {
-  "name": "INDACO Guitar Tuner",
+  "name": "INDACO Tuner — Chitarra, basso e ukulele",
   "short_name": "INDACO Tuner",
-  "description": "Accordatore cromatico e per chitarra degli Indaco Rock Band",
+  "description": "Accordatore gratuito per chitarra, basso, ukulele e modalità cromatica",
+  "id": "./",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "background_color": "#090c12",
   "theme_color": "#090c12",
   "orientation": "portrait-primary",
+  "categories": ["music", "utilities"],
+  "lang": "it",
   "icons": [
     {
       "src": "icon-192.png",

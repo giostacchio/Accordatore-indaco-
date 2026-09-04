@@ -1,19 +1,13 @@
-INDACO GUITAR TUNER - PWA ROOT READY
+INDACO TUNER 2.0 - CHITARRA, BASSO E UKULELE
 
-Nel repository GitHub "Accordatore-indaco-" fai:
-Add file > Upload files
+La versione 2.0 aggiunge basso a 4 e 5 corde, ukulele, accordature alternative,
+calibrazione A4, tono di riferimento, blocco della corda e una guida pubblica.
 
-Carica TUTTI i file estratti da questo ZIP nella root.
-Non serve creare una cartella icons.
+Per aggiornare il repository GitHub "Accordatore-indaco-":
+1. carica nella root tutti i file della build, senza la cartella .openai;
+2. conferma la sostituzione dei file esistenti;
+3. esegui il commit;
+4. attendi la pubblicazione di GitHub Pages;
+5. dal telefono rimuovi l’eventuale vecchia installazione e installa di nuovo.
 
-Il vecchio index.html verrà aggiornato.
-Puoi lasciare anche IndacoTuner_AndroidStudio_Project.zip: non interferisce con GitHub Pages.
-
-Dopo il Commit changes:
-1. aspetta circa 1-2 minuti;
-2. apri il sito GitHub Pages dal telefono;
-3. se avevi già una scorciatoia, eliminala;
-4. dal menu Chrome scegli "Installa app" / "Aggiungi a schermata Home";
-5. al primo avvio autorizza il microfono.
-
-GitHub Pages usa HTTPS, necessario per l'accesso al microfono.
+Il sito deve essere servito in HTTPS per usare il microfono.
