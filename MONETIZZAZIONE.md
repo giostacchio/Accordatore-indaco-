@@ -1,24 +1,32 @@
-# Monetizzazione senza vendita diretta
+# Piano di monetizzazione GIOSTACCHIO
 
-INDACO Tuner resta gratuito, senza account, pagamenti o assistenza commerciale.
+GIOSTACCHIO nasce gratuito e senza registrazione, ma il progetto può avere due canali distinti di ricavo: Web/PWA e app Android.
 
-## Ordine consigliato
+## Fase 1 — PWA e traffico organico
 
-1. Pubblicare e verificare che accordatore, privacy, installazione e condivisione funzionino.
-2. Collegare Google Search Console e inviare sitemap.xml.
-3. Creare contenuti originali utili attorno alle accordature più cercate.
-4. Misurare visite e ricerche senza profilazione invasiva.
-5. Solo con traffico reale, richiedere AdSense o attivare un link affiliato coerente.
+1. Rendere accordatore e metronomo affidabili, veloci e installabili.
+2. Collegare Google Search Console e mantenere sitemap/SEO.
+3. Creare pagine/contenuti utili sulle accordature e sullo studio del tempo.
+4. Inserire, soltanto dopo traffico reale, un singolo spazio pubblicitario non invasivo oppure link affiliati coerenti con strumenti/accessori musicali.
+5. Non inserire banner nel quadrante dell’accordatore o nei controlli principali del metronomo.
 
-## Link affiliato opzionale
+## Fase 2 — App Android pubblica
 
-Inserire in config.js soltanto l’URL approvato dal programma di affiliazione.
-La sezione commerciale rimane invisibile finché l’URL è vuoto. Prima di attivarla,
-verificare che l’informativa privacy e la dicitura di affiliazione siano aggiornate.
+1. Trasformare la PWA in una vera app Android con nome GIOSTACCHIO.
+2. Generare un Android App Bundle (AAB) firmato per Google Play.
+3. Pubblicare una versione gratuita con accordatore + metronomo completi.
+4. Integrare AdMob in spazi non invasivi, lontani dai controlli principali.
+5. Valutare successivamente una versione Pro o acquisto una tantum per rimuovere pubblicità e sbloccare funzioni avanzate.
 
-## Pubblicità
+## Funzioni che possono aumentare il valore della versione Pro
 
-Non inserire banner dentro il quadrante o fra il pulsante microfono e le corde.
-La qualità dell’accordatore viene prima: un solo spazio sotto la guida è sufficiente
-per il primo test. Attivare pubblicità e relativo consenso soltanto dopo l’approvazione
-del circuito pubblicitario.
+- preset personali di accordatura;
+- modalità palco ad alta leggibilità;
+- setlist di preset richiamabili rapidamente;
+- suddivisioni del metronomo e accenti personalizzati;
+- timer di studio e progressione automatica dei BPM;
+- nessuna pubblicità.
+
+## Principio
+
+Prima utilità e affidabilità, poi monetizzazione. Un accordatore/metronomo che infastidisce durante l’uso perde utenti e quindi anche potenziale ricavo.
