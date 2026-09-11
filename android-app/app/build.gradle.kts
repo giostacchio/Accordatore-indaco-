@@ -2,6 +2,9 @@ plugins {
     id("com.android.application")
 }
 
+val generatedWebAssetsDir = layout.buildDirectory.get().dir("generated/webAssets").asFile
+val generatedWebDir = generatedWebAssetsDir.resolve("web")
+
 android {
     namespace = "it.giostacchio.app"
     compileSdk = 36
@@ -29,10 +32,10 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
 
-    sourceSets["main"].assets.srcDir(layout.buildDirectory.dir("generated/webAssets"))
+    sourceSets["main"].assets.srcDir(generatedWebAssetsDir)
 }
 
-val syncWebAssets by tasks.registering(Copy::class) {
+val syncWebAssets = tasks.register<Copy>("syncWebAssets") {
     from(rootProject.projectDir.parentFile) {
         include(
             "index.html",
@@ -52,7 +55,7 @@ val syncWebAssets by tasks.registering(Copy::class) {
             "favicon.ico"
         )
     }
-    into(layout.buildDirectory.dir("generated/webAssets/web"))
+    into(generatedWebDir)
 }
 
 tasks.named("preBuild").configure {
