@@ -1,4 +1,4 @@
-const CACHE='giostacchio-v3.0.0';
+const CACHE='giostacchio-v3.0.1';
 const CORE=[
   './',
   './index.html',
