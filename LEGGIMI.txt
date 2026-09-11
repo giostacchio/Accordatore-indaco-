@@ -1,13 +1,15 @@
-INDACO TUNER 2.0 - CHITARRA, BASSO E UKULELE
+GIOSTACCHIO 3.0 - ACCORDATORE + METRONOMO
 
-La versione 2.0 aggiunge basso a 4 e 5 corde, ukulele, accordature alternative,
-calibrazione A4, tono di riferimento, blocco della corda e una guida pubblica.
+La versione pubblica su GitHub Pages è una PWA installabile e comprende:
+- accordatore per chitarra, basso, ukulele e cromatico;
+- accordature alternative e calibrazione A4;
+- tono di riferimento e blocco della corda;
+- metronomo 40-240 BPM con TAP tempo;
+- click acustico, segnale visivo e modalità solo luce;
+- misure 2/4, 3/4, 4/4 e 6/8.
 
-Per aggiornare il repository GitHub "Accordatore-indaco-":
-1. carica nella root tutti i file della build, senza la cartella .openai;
-2. conferma la sostituzione dei file esistenti;
-3. esegui il commit;
-4. attendi la pubblicazione di GitHub Pages;
-5. dal telefono rimuovi l’eventuale vecchia installazione e installa di nuovo.
+Il file IndacoTuner_AndroidStudio_Project.zip presente nel repository è una base precedente e NON rappresenta ancora la versione Android definitiva GIOSTACCHIO.
+
+Per il Play Store dovrà essere generato un nuovo progetto/app bundle firmato con nome e package GIOSTACCHIO.
 
 Il sito deve essere servito in HTTPS per usare il microfono.
