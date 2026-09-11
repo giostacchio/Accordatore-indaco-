@@ -1,0 +1,63 @@
+name: Build GIOSTACCHIO Android
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+    paths:
+      - 'android-app/**'
+      - 'index.html'
+      - 'styles.css'
+      - 'metronome.css'
+      - 'app.js'
+      - 'metronome.js'
+      - 'config.js'
+      - 'privacy.html'
+      - 'manifest.webmanifest'
+      - 'service-worker.js'
+      - '.github/workflows/build-giostacchio-android.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Android 16 SDK
+        run: sdkmanager "platforms;android-36" "build-tools;36.0.0"
+
+      - name: Gradle 9.6
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '9.6.0'
+
+      - name: Build APK and AAB
+        run: gradle --project-dir android-app :app:assembleDebug :app:bundleRelease --stacktrace
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: GIOSTACCHIO-debug-APK
+          path: android-app/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
+
+      - name: Upload AAB
+        uses: actions/upload-artifact@v4
+        with:
+          name: GIOSTACCHIO-release-AAB-unsigned
+          path: android-app/app/build/outputs/bundle/release/app-release.aab
+          if-no-files-found: error
