@@ -1,9 +1,11 @@
-const CACHE='indaco-tuner-v2.0.1-github';
+const CACHE='giostacchio-v3.0.0';
 const CORE=[
   './',
   './index.html',
   './styles.css',
+  './metronome.css',
   './app.js',
+  './metronome.js',
   './config.js',
   './privacy.html',
   './manifest.webmanifest',
