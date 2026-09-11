@@ -167,6 +167,28 @@
     status.textContent = "TAP TEMPO · " + bpm + " BPM";
   }
 
+  async function shareGiostacchio(event) {
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    const shareData = {
+      title: "GIOSTACCHIO",
+      text: "Accordatore e metronomo gratuito per musicisti.",
+      url: window.location.href
+    };
+    try {
+      if (navigator.share) await navigator.share(shareData);
+      else {
+        await navigator.clipboard.writeText(window.location.href);
+        const tunerError = $("error");
+        if (tunerError) tunerError.textContent = "Link copiato.";
+      }
+    } catch (error) {
+      if (error && error.name === "AbortError") return;
+      const tunerError = $("error");
+      if (tunerError) tunerError.textContent = "Non riesco a condividere il link da questo browser.";
+    }
+  }
+
   loadPreferences();
   renderBeats();
   updateUI();
@@ -186,6 +208,15 @@
     beatIndex = 0;
     renderBeats(-1);
     savePreferences();
+  });
+
+  const shareBtn = $("shareBtn");
+  if (shareBtn) shareBtn.addEventListener("click", shareGiostacchio, true);
+  window.addEventListener("appinstalled", () => {
+    window.setTimeout(() => {
+      const tunerError = $("error");
+      if (tunerError) tunerError.textContent = "GIOSTACCHIO installato.";
+    }, 0);
   });
 
   document.addEventListener("visibilitychange", () => {
