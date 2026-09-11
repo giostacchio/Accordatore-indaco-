@@ -1,20 +1,18 @@
-# INDACO Tuner
+# GIOSTACCHIO
 
-Accordatore PWA gratuito per:
+PWA gratuita per musicisti con:
 
-- chitarra standard, mezzo tono sotto, Drop D e Re standard;
+- accordatore per chitarra standard, mezzo tono sotto, Drop D e Re standard;
 - basso a 4 corde, basso a 5 corde e Drop D;
 - ukulele standard, Low G e baritono;
-- uso cromatico con La di riferimento regolabile da 430 a 450 Hz.
+- modalità cromatica con La di riferimento regolabile da 430 a 450 Hz;
+- metronomo 40–240 BPM con TAP tempo, misure 2/4, 3/4, 4/4 e 6/8;
+- metronomo acustico, visivo oppure combinato.
 
 Il microfono viene elaborato localmente nel browser. L’audio non viene registrato né inviato a server.
 
-## Sito
-
-La versione pubblica è disponibile su:
+## Versione pubblica
 
 https://giostacchio.github.io/Accordatore-indaco-/
 
-## Pubblicazione GitHub Pages
-
-I file necessari restano nella root del repository. GitHub Pages richiede HTTPS per consentire l’accesso al microfono.
+La versione pubblica è una PWA installabile. Il repository contiene anche una precedente base Android Studio, che dovrà essere rigenerata con nome e package GIOSTACCHIO prima della pubblicazione sul Play Store.
