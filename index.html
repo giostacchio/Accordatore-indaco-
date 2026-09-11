@@ -5,55 +5,62 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#080b12">
   <meta name="color-scheme" content="dark">
-  <meta name="description" content="Accordatore online gratuito per chitarra, basso a 4 o 5 corde e ukulele. Preciso, installabile e con audio elaborato solo sul dispositivo.">
+  <meta name="description" content="GIOSTACCHIO: accordatore e metronomo online gratuito per chitarra, basso e ukulele. Preciso, installabile, con metronomo acustico e visivo.">
   <meta name="robots" content="index,follow">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="it_IT">
-  <meta property="og:title" content="INDACO Tuner — Chitarra, basso e ukulele">
-  <meta property="og:description" content="Accorda dal browser, gratis e senza registrazione. Il microfono resta sul tuo dispositivo.">
+  <meta property="og:title" content="GIOSTACCHIO — Accordatore e metronomo">
+  <meta property="og:description" content="Accorda e studia il tempo dal browser, gratis e senza registrazione. Microfono elaborato solo sul dispositivo.">
   <meta name="twitter:card" content="summary">
   <link rel="canonical" href="https://giostacchio.github.io/Accordatore-indaco-/">
   <link rel="manifest" href="./manifest.webmanifest">
   <link rel="icon" href="./favicon.ico" sizes="any">
   <link rel="apple-touch-icon" href="./apple-touch-icon.png">
   <link rel="stylesheet" href="./styles.css">
+  <link rel="stylesheet" href="./metronome.css">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="INDACO Tuner">
-  <title>Accordatore online per chitarra, basso e ukulele | INDACO Tuner</title>
+  <meta name="apple-mobile-web-app-title" content="GIOSTACCHIO">
+  <title>GIOSTACCHIO | Accordatore e metronomo per musicisti</title>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "WebApplication",
-    "name": "INDACO Tuner",
+    "name": "GIOSTACCHIO",
     "url": "https://giostacchio.github.io/Accordatore-indaco-/",
     "applicationCategory": "MusicApplication",
     "operatingSystem": "Qualsiasi browser moderno",
     "inLanguage": "it",
     "isAccessibleForFree": true,
-    "description": "Accordatore cromatico gratuito per chitarra, basso e ukulele con elaborazione locale del microfono."
+    "description": "Accordatore cromatico e metronomo gratuito per chitarra, basso e ukulele con elaborazione locale del microfono."
   }
   </script>
   <script defer src="./config.js"></script>
   <script defer src="./app.js"></script>
+  <script defer src="./metronome.js"></script>
 </head>
 <body>
-  <a class="skip-link" href="#accordatore">Vai all’accordatore</a>
+  <a class="skip-link" href="#accordatore">Vai agli strumenti</a>
 
   <header class="topbar">
-    <a class="brand" href="./" aria-label="INDACO Tuner, pagina iniziale"><span>INDACO</span> TUNER</a>
+    <a class="brand" href="./" aria-label="GIOSTACCHIO, pagina iniziale"><span>GIOSTACCHIO</span></a>
     <div class="top-actions">
       <span class="privacy-chip"><span id="micDot" class="mic-dot" aria-hidden="true"></span><span id="micPrivacy">Microfono spento</span></span>
-      <button id="shareBtn" class="icon-button" type="button" aria-label="Condividi INDACO Tuner" title="Condividi">↗</button>
+      <button id="shareBtn" class="icon-button" type="button" aria-label="Condividi GIOSTACCHIO" title="Condividi">↗</button>
     </div>
   </header>
+
+  <nav class="tool-switcher" aria-label="Strumenti principali">
+    <a href="#accordatore">🎸 Accordatore</a>
+    <a href="#metronomo">🥁 Metronomo</a>
+  </nav>
 
   <main>
     <section id="accordatore" class="tuner-shell" aria-labelledby="pageTitle">
       <div class="intro">
-        <p class="eyebrow">GRATIS · NESSUNA REGISTRAZIONE</p>
-        <h1 id="pageTitle">Accordatore online</h1>
+        <p class="eyebrow">GIOSTACCHIO · GRATIS · NESSUNA REGISTRAZIONE</p>
+        <h1 id="pageTitle">Accordatore</h1>
         <p>Chitarra, basso e ukulele. Scegli lo strumento, avvia il microfono e suona una corda alla volta.</p>
       </div>
 
@@ -130,6 +137,55 @@
       </div>
     </section>
 
+    <section id="metronomo" class="metronome-shell metro-anchor" aria-labelledby="metroTitle">
+      <div class="intro">
+        <p class="eyebrow">TEMPO · CLICK · LUCE</p>
+        <h2 id="metroTitle">Metronomo</h2>
+        <p>Usalo con il click, soltanto con il segnale visivo oppure con entrambi.</p>
+      </div>
+
+      <div class="metro-card">
+        <div class="metro-display">
+          <div id="metroFlash" class="metro-light" aria-hidden="true"></div>
+          <div class="metro-bpm-line"><strong id="metroBpmValue">100</strong><span>BPM</span></div>
+        </div>
+
+        <div id="metroBeats" class="metro-beats" aria-label="Movimenti della battuta"></div>
+
+        <div class="metro-slider">
+          <label for="metroBpm" class="signal-label"><span>Velocità</span><span>40–240 BPM</span></label>
+          <input id="metroBpm" type="range" min="40" max="240" value="100" step="1">
+        </div>
+
+        <div class="metro-adjust">
+          <button id="metroMinus" class="secondary" type="button" aria-label="Diminuisci BPM">−</button>
+          <button id="metroTap" class="secondary" type="button">TAP TEMPO</button>
+          <button id="metroPlus" class="secondary" type="button" aria-label="Aumenta BPM">+</button>
+        </div>
+
+        <div class="metro-actions">
+          <button id="metroStart" class="start" type="button">Avvia</button>
+          <button id="metroSound" class="secondary" type="button" aria-pressed="true">🔊 Suono ON</button>
+        </div>
+
+        <div class="metro-options">
+          <label>
+            <span class="signal-label"><span>Misura</span><span>accento sul primo</span></span>
+            <select id="metroSignature" aria-label="Misura del metronomo">
+              <option value="2">2/4</option>
+              <option value="3">3/4</option>
+              <option value="4" selected>4/4</option>
+              <option value="6">6/8</option>
+            </select>
+          </label>
+          <button class="secondary" type="button" onclick="document.getElementById('metroSound').click()">Alterna suono / solo luce</button>
+        </div>
+
+        <p id="metroStatus" class="metro-status" aria-live="polite">PRONTO</p>
+        <p class="metro-note">Il primo movimento è evidenziato con un click più acuto e un lampo differente.</p>
+      </div>
+    </section>
+
     <section class="guide" aria-labelledby="guideTitle">
       <div class="section-heading">
         <p class="eyebrow">GUIDA RAPIDA</p>
@@ -174,15 +230,15 @@
       <details><summary>Perché il basso può richiedere più tempo?</summary><p>Le frequenze gravi hanno onde più lunghe. Lascia risuonare la corda, tieni il telefono vicino e usa il blocco del target se il rilevamento salta di ottava.</p></details>
       <details><summary>Funziona senza installazione?</summary><p>Sì. Funziona direttamente nel browser. L’installazione aggiunge un’icona alla schermata Home e permette di riaprirlo come un’app.</p></details>
       <details><summary>Il sito ascolta o salva quello che suono?</summary><p>No. Il browser concede l’accesso al microfono solo dopo il tuo consenso e l’elaborazione avviene localmente. Quando fermi il microfono, la traccia audio viene chiusa.</p></details>
-      <details><summary>Posso usarlo offline?</summary><p>Dopo la prima visita, i file essenziali vengono conservati dal browser. Il microfono continua a funzionare anche senza connessione su dispositivi compatibili.</p></details>
+      <details><summary>Posso usarlo offline?</summary><p>Dopo la prima visita, i file essenziali vengono conservati dal browser. Accordatore e metronomo continuano a funzionare anche senza connessione su dispositivi compatibili.</p></details>
     </section>
   </main>
 
   <footer>
-    <span>INDACO Tuner · versione 2.0</span>
+    <span>GIOSTACCHIO · versione 3.0</span>
     <nav aria-label="Informazioni">
       <a href="./privacy.html">Privacy</a>
-      <a href="https://github.com/giostacchio/Accordatore-indaco-" rel="noopener" target="_blank">Codice</a>
+      <a href="https://github.com/giostacchio/Accordatore-indaco-/" rel="noopener" target="_blank">Codice</a>
     </nav>
   </footer>
 </body>
